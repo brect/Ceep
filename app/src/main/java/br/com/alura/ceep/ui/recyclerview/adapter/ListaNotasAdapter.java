@@ -11,13 +11,11 @@ import java.util.List;
 
 import br.com.alura.ceep.R;
 import br.com.alura.ceep.model.Nota;
-import br.com.alura.ceep.ui.activity.ListaNotasActivity;
 
-public class ListaNotasAdapter extends RecyclerView.Adapter {
+public class ListaNotasAdapter extends RecyclerView.Adapter<ListaNotasAdapter.NotaViewHolder> {
 
-
-    private List<Nota> notas;
-    private Context context;
+    private final List<Nota> notas;
+    private final Context context;
 
     public ListaNotasAdapter(Context context, List<Nota> notas){
         this.context = context;
@@ -25,18 +23,16 @@ public class ListaNotasAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View viewCriada = LayoutInflater.from(context).inflate(R.layout.item_nota, parent, false);
+    public ListaNotasAdapter.NotaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View viewCriada = LayoutInflater.from(context)
+                .inflate(R.layout.item_nota, parent, false);
         return new NotaViewHolder(viewCriada);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(ListaNotasAdapter.NotaViewHolder holder, int position) {
         Nota nota = notas.get(position);
-        TextView titulo = holder.itemView.findViewById(R.id.item_nota_titulo);
-        titulo.setText(nota.getTitulo());
-        TextView descricao = holder.itemView.findViewById(R.id.item_nota_descricao);
-        descricao.setText(nota.getDescricao());
+        holder.vincula(nota);
     }
 
     @Override
@@ -44,10 +40,24 @@ public class ListaNotasAdapter extends RecyclerView.Adapter {
         return notas.size();
     }
 
-    class NotaViewHolder extends RecyclerView.ViewHolder{
+    class NotaViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView titulo;
+        private final TextView descricao;
 
         public NotaViewHolder(View itemView) {
             super(itemView);
+            titulo = itemView.findViewById(R.id.item_nota_titulo);
+            descricao = itemView.findViewById(R.id.item_nota_descricao);
+        }
+
+        public void vincula(Nota nota){
+            preencheCampo(nota);
+        }
+
+        private void preencheCampo(Nota nota) {
+            titulo.setText(nota.getTitulo());
+            descricao.setText(nota.getDescricao());
         }
     }
 }
